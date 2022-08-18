@@ -5,12 +5,13 @@
 import os
 import yaml
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, EmitEvent
+from launch.actions import DeclareLaunchArgument, EmitEvent, RegisterEventHandler
 from launch.conditions import LaunchConfigurationEquals
 from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch.events import matches_action
 from launch_ros.actions import LifecycleNode
 from launch_ros.events.lifecycle import ChangeState
+from launch_ros.event_handlers.on_state_transition import OnStateTransition
 
 from lifecycle_msgs.msg import Transition
 from ament_index_python.packages import get_package_share_directory
@@ -104,7 +105,17 @@ def generate_launch_description():
 
   launch_description.append(microstrain_node)
   launch_description.append(config_event)
-  launch_description.append(activate_event)
+  launch_description.append(RegisterEventHandler(
+    event_handler=OnStateTransition(
+      target_lifecycle_node=microstrain_node,
+      goal_state="inactive",
+      entities=[
+        EmitEvent(
+          event=activate_event
+        )
+      ],
+    )
+  ))
   return LaunchDescription(launch_description)
   
 
