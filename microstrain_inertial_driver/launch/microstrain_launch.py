@@ -88,14 +88,14 @@ def generate_launch_description():
   )
 
   # Optional configure and activate steps
-  config_event = EmitEvent(
+  config_emit_event = EmitEvent(
     event = ChangeState(
       lifecycle_node_matcher = matches_action(microstrain_node),
       transition_id          = Transition.TRANSITION_CONFIGURE
     ),
     condition = LaunchConfigurationEquals('configure', 'true')
   )
-  activate_event = EmitEvent(
+  activate_emit_event = EmitEvent(
     event = ChangeState(
       lifecycle_node_matcher = matches_action(microstrain_node),
       transition_id          = Transition.TRANSITION_ACTIVATE
@@ -104,13 +104,13 @@ def generate_launch_description():
   )
 
   launch_description.append(microstrain_node)
-  launch_description.append(config_event)
+  launch_description.append(config_emit_event)
   launch_description.append(RegisterEventHandler(
     event_handler=OnStateTransition(
       target_lifecycle_node=microstrain_node,
       goal_state="inactive",
       entities=[
-        activate_event
+        activate_emit_event
       ],
     )
   ))
