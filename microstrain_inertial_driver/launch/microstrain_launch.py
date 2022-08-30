@@ -112,6 +112,7 @@ def generate_launch_description():
       entities=[
         activate_emit_event
       ],
+      handle_once=True,  # Don't automatically activate after the first time
     )
   ))
   return LaunchDescription(launch_description)
