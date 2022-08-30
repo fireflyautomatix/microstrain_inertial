@@ -110,9 +110,7 @@ def generate_launch_description():
       target_lifecycle_node=microstrain_node,
       goal_state="inactive",
       entities=[
-        EmitEvent(
-          event=activate_event
-        )
+        activate_event
       ],
     )
   ))
