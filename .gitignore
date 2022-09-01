@@ -41,3 +41,8 @@ api/manifest.yaml
 
 # Ignore the ROS generated CMakeLists.txt
 /CMakeLists.txt
+
+# colcon build folders
+build/
+install/
+log/
