@@ -6,6 +6,7 @@ set(COMMON_NAME "microstrain_inertial_driver_common")
 set(COMMON_DIR "${${PROJECT_NAME}_SOURCE_DIR}/${COMMON_NAME}")
 set(COMMON_SRC_DIR "${COMMON_DIR}/src")
 set(COMMON_INC_DIR "${COMMON_DIR}/include/${COMMON_NAME}")
+set(COMMON_TEST_DIR "${COMMON_DIR}/test")
 
 # Make sure that the submodule has been properly initialized
 if(NOT EXISTS "${COMMON_DIR}/src")
@@ -122,7 +123,7 @@ set(LIB_INC_FILES
   include/${PROJECT_NAME}/microstrain_inertial_driver.h
 )
 add_library(${PROJECT_NAME} ${LIB_SRC_FILES} ${LIB_INC_FILES})
-ament_target_dependencies(${PROJECT_NAME}
+list(APPEND dependencies
   rclcpp
   rclcpp_lifecycle
   std_msgs
@@ -138,6 +139,7 @@ ament_target_dependencies(${PROJECT_NAME}
   tf2_geometry_msgs
   microstrain_inertial_msgs
 )
+ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
 # Executables
 add_executable(${PROJECT_NAME}_node ${NODE_SRC_FILES} ${NODE_INC_FILES})
@@ -199,3 +201,29 @@ file(GLOB BOOST_LIBS "${MSCL_DIR}/Boost/lib/*")
 install(FILES ${BOOST_LIBS} ${MSCL_DIR}/libmscl.so
   DESTINATION lib
 )
+
+##########
+## Test ##
+##########
+
+if(BUILD_TESTING)
+  find_package(ament_cmake_gtest REQUIRED)
+  find_package(ament_cmake_gmock REQUIRED)
+
+  ament_add_gmock(test_microstrain_parser
+    ${COMMON_TEST_DIR}/test_microstrain_parser.cpp
+    ${COMMON_SRC_DIR}/microstrain_subscribers.cpp
+    ${COMMON_SRC_DIR}/microstrain_publishers.cpp
+    ${COMMON_SRC_DIR}/microstrain_node_base.cpp
+    ${COMMON_SRC_DIR}/microstrain_services.cpp
+    ${COMMON_SRC_DIR}/microstrain_parser.cpp
+    ${COMMON_SRC_DIR}/microstrain_config.cpp
+  )
+  target_link_libraries(test_microstrain_parser
+    ${MSCL_LIB_PATH}
+    ${catkin_LIBRARIES}
+  )
+  ament_target_dependencies(test_microstrain_parser
+    ${dependencies}
+  )
+endif()
