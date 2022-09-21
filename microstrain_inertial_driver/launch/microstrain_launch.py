@@ -5,7 +5,7 @@
 import os
 import yaml
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, EmitEvent
+from launch.actions import DeclareLaunchArgument, SetEnvironmentVariable, EmitEvent
 from launch.conditions import LaunchConfigurationEquals
 from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch.events import matches_action
@@ -36,6 +36,7 @@ def generate_launch_description():
   launch_description.append(DeclareLaunchArgument('node_name',   default_value=_PACKAGE_NAME,      description='Name to give the Microstrain Inertial Driver node'))
   launch_description.append(DeclareLaunchArgument('configure',   default_value='false',            description='Whether or not to configure the node on startup'))
   launch_description.append(DeclareLaunchArgument('activate',    default_value='false',            description='Whether or not to activate the node on startup'))
+  launch_description.append(DeclareLaunchArgument('debug',       default_value='false',            description='Whether or not to log debug information.'))
   launch_description.append(DeclareLaunchArgument('params_file', default_value=_EMPTY_PARAMS_FILE, description='Path to file that will load additional parameters'))
 
   # Add some old launch parameters for backwards compatibility
@@ -44,14 +45,17 @@ def generate_launch_description():
   launch_description.append(DeclareLaunchArgument('aux_port',              default_value='/dev/ttyACM1',        description="DEPRECATED. Use params_file instead"))
   launch_description.append(DeclareLaunchArgument('baudrate',              default_value='115200',              description="DEPRECATED. Use params_file instead"))
   launch_description.append(DeclareLaunchArgument('imu_frame_id',          default_value='sensor',              description="DEPRECATED. Use params_file instead"))
-  launch_description.append(DeclareLaunchArgument('imu_data_rate',         default_value='100',                 description="DEPRECATED. Use params_file instead"))
-  launch_description.append(DeclareLaunchArgument('filter_data_rate',      default_value='10',                  description="DEPRECATED. Use params_file instead"))
+  launch_description.append(DeclareLaunchArgument('imu_data_rate',         default_value='100.0',                 description="DEPRECATED. Use params_file instead"))
+  launch_description.append(DeclareLaunchArgument('filter_data_rate',      default_value='10.0',                  description="DEPRECATED. Use params_file instead"))
   launch_description.append(DeclareLaunchArgument('gnss1_frame_id',        default_value='gnss1_antenna_wgs84', description="DEPRECATED. Use params_file instead"))
   launch_description.append(DeclareLaunchArgument('gnss2_frame_id',        default_value='gnss2_antenns_wgs84', description="DEPRECATED. Use params_file instead"))
   launch_description.append(DeclareLaunchArgument('filter_frame_id',       default_value='sensor_wgs84',        description="DEPRECATED. Use params_file instead"))
   launch_description.append(DeclareLaunchArgument('filter_child_frame_id', default_value='sensor',              description="DEPRECATED. Use params_file instead"))
   launch_description.append(DeclareLaunchArgument('nmea_frame_id',         default_value='nmea',                description="DEPRECATED. Use params_file instead"))
   launch_description.append(DeclareLaunchArgument('use_enu_frame',         default_value='False',               description="DEPRECATED. Use params_file instead"))
+
+  # Pass an environment variable to the node to determine if it is in debug or not
+  launch_description.append(SetEnvironmentVariable('MICROSTRAIN_INERTIAL_DEBUG', value=LaunchConfiguration('debug')))
 
   # ****************************************************************** 
   # Microstrain sensor node 
@@ -82,7 +86,12 @@ def generate_launch_description():
       },
 
       # If you want to override any settings in the params.yml file, make a new yaml file, and set the value via the params_file arg
-      LaunchConfiguration('params_file')
+      LaunchConfiguration('params_file'),
+
+      # Supported overrides
+      {
+        "debug" : LaunchConfiguration('debug')
+      },
     ]
   )
 
