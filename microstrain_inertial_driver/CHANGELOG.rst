@@ -2,8 +2,8 @@
 Changelog for package microstrain_inertial_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+4.3.0 (2024-05-15)
+------------------
 * Updates CV7 INS example yaml (`https://github.com/LORD-MicroStrain/microstrain_inertial/pull/330` _)
 * Update udev to specify manufacturer (`https://github.com/LORD-MicroStrain/microstrain_inertial/pull/327` _)
 * Rename gx5_15 config file to match folder name (`https://github.com/LORD-MicroStrain/microstrain_inertial/pull/321 _`)
