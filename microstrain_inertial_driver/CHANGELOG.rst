@@ -2,7 +2,7 @@
 Changelog for package microstrain_inertial_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
+4.6.1 (2025-04-25)
 ------------------
 * No longer exports ROS packages
 * Contributors: Rob
