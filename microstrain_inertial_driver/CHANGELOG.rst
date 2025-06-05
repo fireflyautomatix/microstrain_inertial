@@ -2,8 +2,8 @@
 Changelog for package microstrain_inertial_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+4.7.0 (2025-06-05)
+------------------
 * Adds support for CV7-GNSS-INS (`#388 <https://github.com/LORD-MicroStrain/microstrain_inertial/issues/388>`_)
 * Contributors: Rob
 
