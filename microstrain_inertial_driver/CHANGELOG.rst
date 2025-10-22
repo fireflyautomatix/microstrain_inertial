@@ -2,7 +2,7 @@
 Changelog for package microstrain_inertial_driver
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
+4.8.0 (2025-10-22)
 ------------------
 * Updates submodule (`#393 <https://github.com/LORD-MicroStrain/microstrain_inertial/issues/393>`_)
 * Contributors: Rob

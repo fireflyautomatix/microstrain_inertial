@@ -2,7 +2,7 @@
 Changelog for package microstrain_inertial_description
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
+4.8.0 (2025-10-22)
 ------------------
 
 4.7.0 (2025-06-05)
