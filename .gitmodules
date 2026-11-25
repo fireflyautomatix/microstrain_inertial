@@ -3,7 +3,9 @@
 	url = https://github.com/LORD-MicroStrain/microstrain_inertial_msgs_common.git
 [submodule "microstrain_inertial_driver/microstrain_inertial_driver_common"]
 	path = microstrain_inertial_driver/microstrain_inertial_driver_common
-	url = https://github.com/LORD-MicroStrain/microstrain_inertial_driver_common.git
+	# TODO: switch back to LORD-MicroStrain once the async raw file writer and clock bias fix are upstream
+	url = https://github.com/fireflyautomatix/microstrain_inertial_driver_common.git
+	branch = bugfix/fix-gps-data-interrupted-while-recording
 [submodule "microstrain_inertial_rqt/microstrain_inertial_rqt_common"]
 	path = microstrain_inertial_rqt/microstrain_inertial_rqt_common
 	url = https://github.com/LORD-MicroStrain/microstrain_inertial_rqt_common.git

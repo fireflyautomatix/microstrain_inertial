@@ -157,6 +157,7 @@ set(COMMON_SRC_FILES
   ${COMMON_SRC_DIR}/config.cpp
 
   ${COMMON_SRC_DIR}/utils/clock_bias_monitor.cpp
+  ${COMMON_SRC_DIR}/utils/async_file_writer.cpp
 
   ${COMMON_SRC_DIR}/utils/mappings/mip_mapping.cpp
   ${COMMON_SRC_DIR}/utils/mappings/mip_publisher_mapping.cpp
@@ -175,6 +176,7 @@ set(COMMON_INC_FILES
   ${COMMON_INC_DIR}/config.h
   ${COMMON_INC_DIR}/utils/ros_compat.h
   ${COMMON_INC_DIR}/utils/clock_bias_monitor.h
+  ${COMMON_INC_DIR}/utils/async_file_writer.h
 
   ${COMMON_INC_DIR}/utils/mappings/mip_mapping.h
   ${COMMON_INC_DIR}/utils/mappings/mip_publisher_mapping.h
@@ -301,6 +303,40 @@ install(DIRECTORY launch config
 install(DIRECTORY ${COMMON_DIR}/config
   DESTINATION share/${PROJECT_NAME}/${COMMON_NAME}
 )
+
+#############
+## Testing ##
+#############
+
+# BUILD_TESTING is forced off above so the MIP SDK does not build its own tests, so check the value it had on entry
+if(BUILD_TESTING_TEMP)
+  find_package(ament_cmake_gtest REQUIRED)
+
+  # The common code, built the same way as the plain node, so tests can link against it
+  set(COMMON_TEST_LIB_NAME ${PROJECT_NAME}_common_for_tests)
+  add_library(${COMMON_TEST_LIB_NAME} STATIC ${COMMON_FILES})
+  target_link_libraries(${COMMON_TEST_LIB_NAME} PUBLIC
+    ${AMENT_COMMON_DEPENDENCIES}
+    mip
+    microstrain
+    microstrain_serial
+    microstrain_recording_connection
+    ${GeographicLib_LIBRARIES}
+  )
+
+  set(COMMON_TEST_DIR ${COMMON_DIR}/test)
+
+  ament_add_gtest(test_clock_bias_monitor ${COMMON_TEST_DIR}/test_clock_bias_monitor.cpp)
+  target_link_libraries(test_clock_bias_monitor ${COMMON_TEST_LIB_NAME})
+
+  # Uses a FIFO with a paused reader to stand in for a stalled disk
+  ament_add_gtest(test_async_file_writer ${COMMON_TEST_DIR}/test_async_file_writer.cpp TIMEOUT 60)
+  target_link_libraries(test_async_file_writer ${COMMON_TEST_LIB_NAME})
+
+  # Uses a pseudo terminal as the serial port and a FIFO as the raw file, so needs no hardware
+  ament_add_gtest(test_recording_stall ${COMMON_TEST_DIR}/test_recording_stall.cpp TIMEOUT 60)
+  target_link_libraries(test_recording_stall ${COMMON_TEST_LIB_NAME} util)
+endif()
 
 ament_package()
 
